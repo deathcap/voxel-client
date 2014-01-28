@@ -29,6 +29,8 @@ Client.prototype.initialize = function(opts) {
   self.lerpPercent = 0.1
   self.remoteClients = {}
   self.serverStream = opts.serverStream
+  self.engine = opts.engine
+  if (!self.engine) throw new Error('voxel-client requires engine option set to voxel-engine module')
   // expose emitter methods on client
   extend(self,new EventEmitter())
 
@@ -103,8 +105,7 @@ Client.prototype.bindEvents = function(connection) {
 Client.prototype.createGame = function(settings) {
   var self = this
   var connection = self.connection
-  var engine = settings.engine
-  if (!engine) throw new Error('voxel-client requires engine option set to voxel-engine module')
+  var engine = self.engine
   self.game = engine(settings)
   self.game.settings = settings
 
