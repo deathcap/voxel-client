@@ -6,7 +6,6 @@ var extend = require('extend')
 var skin = require('minecraft-skin')
 var crunch = require('voxel-crunch')
 var voxelPlayer = require('voxel-player')
-var engine = require('voxel-engine')
 // local dependencies
 var randomName = require('./randomname.js')
 
@@ -104,6 +103,8 @@ Client.prototype.bindEvents = function(connection) {
 Client.prototype.createGame = function(settings) {
   var self = this
   var connection = self.connection
+  var engine = settings.engine
+  if (!engine) throw new Error('voxel-client requires engine option set to voxel-engine module')
   self.game = engine(settings)
   self.game.settings = settings
 
