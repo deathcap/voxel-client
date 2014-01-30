@@ -9,7 +9,6 @@
   "dependencies": {
     "voxel-crunch": "0.2.1",
     "minecraft-skin": "0.1.2",
-    "voxel-player": "0.1.0",
     "duplex-emitter": "2.1.2",
     "extend": "1.1.3"
   },

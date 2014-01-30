@@ -5,7 +5,6 @@ var extend = require('extend')
 // voxel dependencies
 var skin = require('minecraft-skin')
 var crunch = require('voxel-crunch')
-var voxelPlayer = require('voxel-player')
 // local dependencies
 var randomName = require('./randomname.js')
 
@@ -86,14 +85,6 @@ Client.prototype.bindEvents = function(connection) {
       catch(err) { self.emit('error',err) }
     }
 
-    // create the player from a minecraft skin file and tell the
-    // game to use it as the main player
-    var createPlayer = voxelPlayer(game)
-    var avatar = self.avatar = createPlayer(self.playerTexture)
-    avatar.possess()
-    var position = game.settings.avatarInitialPosition
-    avatar.position.set(position[0],position[1],position[2])
-    
     // tell modules consumers we're ready
     self.emit('loadComplete')
   })
