@@ -30,6 +30,7 @@ Client.prototype.initialize = function(opts) {
   self.remoteClients = {}
   self.serverStream = opts.serverStream
   self.engine = opts.engine
+  self.overrideEngineOpts = opts.overrideEngineOpts
   if (!self.engine) throw new Error('voxel-client requires engine option set to voxel-engine module')
   // expose emitter methods on client
   extend(self,new EventEmitter())
@@ -50,6 +51,8 @@ Client.prototype.bindEvents = function(connection) {
   
   // receive initial game settings
   connection.on('settings', function(settings) {
+    settings = self.overrideEngineOpts || settings // use local settings instead since not always serializable TODO
+
     // set client-specific settings
     settings.isClient = true
     settings.texturePath = self.texturePath
