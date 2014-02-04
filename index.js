@@ -96,6 +96,22 @@ Client.prototype.bindEvents = function(connection) {
 
 }
 
+var isInteracting = function(state) {
+  for (var control in state) {
+    if (state[control] !== 0) return true
+  }
+  return false
+}
+
+Client.prototype.disconnect = function() {
+  self.game.controls.removeListener('data', self.onData)
+  self.game = null
+  // TODO: close self.connection?
+
+  window.alert('Disconected from server')
+}
+
+
 Client.prototype.createGame = function(settings) {
   var self = this
   var connection = self.connection
@@ -113,12 +129,15 @@ Client.prototype.createGame = function(settings) {
   self.name = name
 
   // handle controls
-  self.game.controls.on('data', function(state) {
-    var interacting = false
-    Object.keys(state).map(function(control) {
-      if (state[control] > 0) interacting = true
-    })
-    if (interacting) sendState()
+  self.game.controls.on('data', self.onData = function(state) {
+    if (isInteracting(state)) {
+      try {
+        sendState()
+      } catch (e) {
+        console.log('exception sending state',e)
+        self.disconnect()
+      }
+    }
   })
     
   // handle server updates
