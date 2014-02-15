@@ -91,7 +91,9 @@ Client.prototype.bindEvents = function(connection) {
 
   // fires when server sends us voxel edits
   connection.on('set', function(pos, val) {
+    self.serverSettingBlock = true;
     self.game.setBlock(pos, val)
+    self.serverSettingBlock = false;
   })
 
 }
@@ -139,7 +141,14 @@ Client.prototype.createGame = function(settings) {
       }
     }
   })
-    
+
+  // send voxel edits
+  self.game.on('setBlock', function(pos, val) {
+    if (self.serverSettingBlock) return;
+
+    connection.emit('set', pos, val);
+  });
+
   // handle server updates
   // delay is because three.js seems to throw errors if you add stuff too soon
   setTimeout(function() {
