@@ -81,7 +81,7 @@ Client.prototype.bindEvents = function(connection) {
     
     // if not capable, throw error
     if (game.notCapable()) {
-      try{ throw 'game not capable' }
+      try{ throw new Error('game not capable') }
       catch(err) { self.emit('error',err) }
     }
 
